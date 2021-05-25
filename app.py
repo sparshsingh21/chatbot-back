@@ -1,28 +1,32 @@
 from flask import Flask,jsonify, request
+from flask_cors import CORS
 import time
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/bot', methods=['POST'])
 def response():
    jsonResponse = request.get_json()
    if jsonResponse["query"].lower() == "hi":
        result = "Hello"
-   elif jsonResponse["query"].lower() == "how are you?":
+   elif "how are you" in jsonResponse["query"]:
        result = "I'm good, how are you?"
-   elif jsonResponse["query"].lower() == "i am fine":
+   elif "fine" in jsonResponse["query"] or "good" in jsonResponse["query"]:
        result = "That's great!"
-   elif jsonResponse["query"].lower() == "what is the time now?":
+   elif "time" in jsonResponse["query"]:
        result = "Current time is " + time.ctime()
-   elif jsonResponse["query"].lower() == "what is your age?":
+   elif "your age" in jsonResponse["query"]:
        result = "I am just a session old xD"
-   elif jsonResponse["query"].lower() == "bye":
+   elif "bye" in jsonResponse["query"]:
        result = "It was nice talking to you. GoodBye :)"
+   elif "your height" in jsonResponse["query"]:
+       result = "I dont have height"
+       
+   else:
+       result = "Sorry I didn't get that."
 
    return jsonify({"response":result})
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
